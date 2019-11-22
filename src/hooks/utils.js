@@ -32,29 +32,6 @@ function getNextWrappingIndex(moveAmount, baseIndex, itemsLength, circular) {
   return nextIndex
 }
 
-function getItemIndexByCharacterKey(
-  keysSoFar,
-  highlightedIndex,
-  items,
-  itemToStringParam,
-) {
-  let newHighlightedIndex = -1
-  const itemStrings = items.map(item => itemToStringParam(item).toLowerCase())
-  const startPosition = highlightedIndex + 1
-
-  newHighlightedIndex = itemStrings
-    .slice(startPosition)
-    .findIndex(itemString => itemString.startsWith(keysSoFar))
-
-  if (newHighlightedIndex > -1) {
-    return newHighlightedIndex + startPosition
-  } else {
-    return itemStrings
-      .slice(0, startPosition)
-      .findIndex(itemString => itemString.startsWith(keysSoFar))
-  }
-}
-
 function getState(state, props) {
   return Object.keys(state).reduce((prevState, key) => {
     // eslint-disable-next-line no-param-reassign
@@ -239,7 +216,7 @@ function getHighlightedIndexOnOpen(props, state, offset) {
   const {selectedItem, highlightedIndex} = state
 
   // initialHighlightedIndex will give value to highlightedIndex on initial state only.
-  if (initialHighlightedIndex !== undefined && highlightedIndex === undefined) {
+  if (initialHighlightedIndex !== undefined && highlightedIndex > -1) {
     return initialHighlightedIndex
   }
   if (defaultHighlightedIndex !== undefined) {
@@ -265,7 +242,6 @@ function getHighlightedIndexOnOpen(props, state, offset) {
 export {
   getElementIds,
   getNextWrappingIndex,
-  getItemIndexByCharacterKey,
   getState,
   getItemIndex,
   getPropTypesValidator,
